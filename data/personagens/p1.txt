@@ -1,0 +1,9 @@
+Id: 1
+Nome: spolk
+Raca: ia
+Profissao: atirador
+Influencia IA: 40
+Influencia Humano: 11
+Forca: 11
+Agilidade: 19
+Inteligencia: 20
