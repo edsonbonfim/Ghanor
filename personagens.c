@@ -155,23 +155,9 @@ void atributos()
     printf("Inteligencia: %d\n", personagem.atributos.inteligencia);
 }
 
-void guardar()
+void guardar(FILE * file, PERSONAGEM personagem, int id)
 {
-    int qnt = count();
-
-    char sFile[20];
-
-    sprintf(sFile, "data/personagens/p%d.txt", qnt + 1);
-
-    FILE * file = fopen(sFile, "w+");
-
-    if (file == NULL)
-    {
-        perror("Falha ao criar o arquivotnagens.txt");
-        exit(0);
-    }
-
-    fprintf(file, "Id: %d\n",        personagem.identidade.id);
+    fprintf(file, "Id: %d\n",        id);
     fprintf(file, "Nome: %s\n",      personagem.identidade.nome);
     fprintf(file, "Raca: %s\n",      personagem.identidade.raca);
     fprintf(file, "Profissao: %s\n", personagem.identidade.profissao);
@@ -182,10 +168,6 @@ void guardar()
     fprintf(file, "Forca: %d\n",        personagem.atributos.forca);
     fprintf(file, "Agilidade: %d\n",    personagem.atributos.agilidade);
     fprintf(file, "Inteligencia: %d\n", personagem.atributos.inteligencia);
-
-    fclose(file);
-
-    upcount(qnt + 1);
 }
 
 PERSONAGEM * load()
@@ -248,7 +230,26 @@ void criar()
     identidade();
     influencia();
     atributos();
-    guardar();
+
+    int qnt = count();
+    
+    char sFile[20];
+
+    sprintf(sFile, "data/personagens/p%d.txt", qnt + 1);
+
+    FILE * file = fopen(sFile, "w+");
+
+    if (file == NULL)
+    {
+        perror("Falha ao criar o arquivotnagens.txt");
+        exit(0);
+    }
+
+    guardar(file, personagem, personagem.identidade.id);
+
+    fclose(file);
+
+    upcount(qnt + 1);
 }
 
 void editar(PERSONAGEM personagem)
@@ -270,17 +271,7 @@ void editar(PERSONAGEM personagem)
         exit(0);
     }
 
-    fprintf(file, "Id: %d\n",        personagem.identidade.id);
-    fprintf(file, "Nome: %s\n",      personagem.identidade.nome);
-    fprintf(file, "Raca: %s\n",      personagem.identidade.raca);
-    fprintf(file, "Profissao: %s\n", personagem.identidade.profissao);
-
-    fprintf(file, "Influencia IA: %d\n",     personagem.influencia.ia);
-    fprintf(file, "Influencia Humano: %d\n", personagem.influencia.humano);
-
-    fprintf(file, "Forca: %d\n",        personagem.atributos.forca);
-    fprintf(file, "Agilidade: %d\n",    personagem.atributos.agilidade);
-    fprintf(file, "Inteligencia: %d\n", personagem.atributos.inteligencia);
+    guardar(file, personagem, personagem.identidade.id);
 
     fclose(file);
 }
@@ -303,22 +294,12 @@ void apagar(PERSONAGEM * personagem, int id)
 
         if (file == NULL)
         {
-            perror("Falha ao criar o arquivotnagens.txt");
+            perror("Falha ao criar o arquivot /data/personagens/***.txt");
             exit(0);
         }
     
-        fprintf(file, "Id: %d\n",        personagem[i].identidade.id - 1);
-        fprintf(file, "Nome: %s\n",      personagem[i].identidade.nome);
-        fprintf(file, "Raca: %s\n",      personagem[i].identidade.raca);
-        fprintf(file, "Profissao: %s\n", personagem[i].identidade.profissao);
-    
-        fprintf(file, "Influencia IA: %d\n",     personagem[i].influencia.ia);
-        fprintf(file, "Influencia Humano: %d\n", personagem[i].influencia.humano);
-    
-        fprintf(file, "Forca: %d\n",        personagem[i].atributos.forca);
-        fprintf(file, "Agilidade: %d\n",    personagem[i].atributos.agilidade);
-        fprintf(file, "Inteligencia: %d\n", personagem[i].atributos.inteligencia);
-        
+        guardar(file, personagem[i], personagem[i].identidade.id - 1);
+
         fclose(file);
     }
 
@@ -395,11 +376,7 @@ void menu()
 {
     int opcao;
 
-    printf("\n---------------------------------------\n");
-    printf("\nMENU\n\n");
-    printf("1 - Personagens\n");
-    printf("\nOpcao: ");
-
+    printf("\n\nMENU\n\n1 - Personagens\n\nOpcao: ");
     scanf("%d", &opcao);
 
     switch (opcao)
@@ -407,6 +384,8 @@ void menu()
         case 1:
             personagens();
             break;
+        default:
+            menu();
     }
 }
 
