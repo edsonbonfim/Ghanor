@@ -413,7 +413,7 @@ void menu()
 int main()
 {   
     setlocale(LC_ALL,"Portuguese");
-    //criar();
+    
     menu();
 
     printf("\n\n");
