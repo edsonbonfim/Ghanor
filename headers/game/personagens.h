@@ -1,16 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <locale.h>
+bool show_personagens;
 
-enum { ia = 1, humano };
-enum { soldado = 1, cientista, operario, atirador };
+int const PTS_ATRIBUTO = 30;
+
+VIDEO * video;
+EVENT_QUEUE * event_queue_personagens_keyboard_char;
+
+enum raca { ia = 1, humano };
+enum profissao { soldado = 1, cientista, operario, atirador };
+
+bool get_keyboard_personagem_nome;
 
 typedef struct identidade
 {
     int  id;
-    char nome[20];
+    char nome[17];
     int raca;
     int profissao;
 } IDENTIDADE;
@@ -21,18 +24,20 @@ typedef struct influencia
     int ia;
 } INFLUENCIA;
 
-typedef struct atributos
+typedef struct atributo
 {
+    int hp;
+    int xp;
     int forca;
     int agilidade;
     int inteligencia;
-} ATRIBUTOS;
+} ATRIBUTO;
 
 typedef struct personagem
 {
     IDENTIDADE identidade;
     INFLUENCIA influencia;
-    ATRIBUTOS  atributos;
+    ATRIBUTO  atributo;
 } PERSONAGEM;
 
 void clrscr()
@@ -72,8 +77,6 @@ void upcount(int qnt)
     fclose(file);
 }
 
-// CREATE PERSONAGEM
-
 void create_personagem(FILE * file, PERSONAGEM * personagem, int id)
 {
     fprintf(file, "Id: %d\n",        id);
@@ -84,12 +87,12 @@ void create_personagem(FILE * file, PERSONAGEM * personagem, int id)
     fprintf(file, "Influencia IA: %d\n",     personagem->influencia.ia);
     fprintf(file, "Influencia Humano: %d\n", personagem->influencia.humano);
 
-    fprintf(file, "Forca: %d\n",        personagem->atributos.forca);
-    fprintf(file, "Agilidade: %d\n",    personagem->atributos.agilidade);
-    fprintf(file, "Inteligencia: %d\n", personagem->atributos.inteligencia);
+    fprintf(file, "HP: %d\n",           personagem->atributo.hp);
+    fprintf(file, "XP: %d\n",           personagem->atributo.xp);
+    fprintf(file, "Forca: %d\n",        personagem->atributo.forca);
+    fprintf(file, "Agilidade: %d\n",    personagem->atributo.agilidade);
+    fprintf(file, "Inteligencia: %d\n", personagem->atributo.inteligencia);
 }
-
-// EDIT PERSONAGEM
 
 void edit_personagem(PERSONAGEM * personagem)
 {
@@ -114,8 +117,6 @@ void edit_personagem(PERSONAGEM * personagem)
 
     fclose(file);
 }
-
-// DELETE PERSONAGEM
 
 void delete_personagem(PERSONAGEM ** personagem, int id)
 {
@@ -150,8 +151,6 @@ void delete_personagem(PERSONAGEM ** personagem, int id)
     upcount(qnt - 1);
 }
 
-// LOAD PERSONAGENS
-
 PERSONAGEM ** load_personagens()
 {
     int i, qnt = count();
@@ -185,17 +184,17 @@ PERSONAGEM ** load_personagens()
         fscanf(file, " Influencia IA: %d\n",     &personagem[i]->influencia.ia);
         fscanf(file, " Influencia Humano: %d\n", &personagem[i]->influencia.humano);
 
-        fscanf(file, " Forca: %d\n",        &personagem[i]->atributos.forca);
-        fscanf(file, " Agilidade: %d\n",    &personagem[i]->atributos.agilidade);
-        fscanf(file, " Inteligencia: %d\n", &personagem[i]->atributos.inteligencia);
+        fscanf(file, " HP: %d\n",           &personagem[i]->atributo.hp);
+        fscanf(file, " XP: %d\n",           &personagem[i]->atributo.xp);
+        fscanf(file, " Forca: %d\n",        &personagem[i]->atributo.forca);
+        fscanf(file, " Agilidade: %d\n",    &personagem[i]->atributo.agilidade);
+        fscanf(file, " Inteligencia: %d\n", &personagem[i]->atributo.inteligencia);
 
         fclose(file);
     }
 
     return personagem;
 }
-
-// PRINT PERSONAGEM
 
 void print_personagem(PERSONAGEM * personagem)
 {
@@ -234,57 +233,20 @@ void print_personagem(PERSONAGEM * personagem)
 
     printf("Influencia IA: %d\n",     personagem->influencia.ia);
     printf("Influencia Humano: %d\n", personagem->influencia.humano);
-
-    printf("Forca: %d\n",        personagem->atributos.forca);
-    printf("Agilidade: %d\n",    personagem->atributos.agilidade);
-    printf("Inteligencia: %d\n", personagem->atributos.inteligencia);
+    printf("HP: %d\n",                personagem->atributo.hp);
+    printf("XP: %d\n",                personagem->atributo.xp);
+    printf("Forca: %d\n",             personagem->atributo.forca);
+    printf("Agilidade: %d\n",         personagem->atributo.agilidade);
+    printf("Inteligencia: %d\n",      personagem->atributo.inteligencia);
 }
 
-// SET PERSONAGEM IDENTIDADE
-
-void set_personagem_identidade_id(PERSONAGEM * personagem, int id)
+void init_personagem(PERSONAGEM * personagem)
 {
-    personagem->identidade.id = id;
+    personagem->identidade.id = count() + 1;
+    personagem->identidade.nome[0] = '\0';
+    personagem->identidade.raca = 0;
+    personagem->identidade.profissao = 0;
 }
-
-void set_personagem_identidade_nome(PERSONAGEM * personagem, char * nome)
-{
-    strcpy(personagem->identidade.nome, nome);
-}
-
-void set_personagem_identidade_raca(PERSONAGEM * personagem, int raca)
-{
-    personagem->identidade.raca = raca;
-}
-
-void set_personagem_identidade_profissao(PERSONAGEM * personagem, int profissao)
-{
-    personagem->identidade.profissao = profissao;
-}
-
-void set_personagem_identidade(PERSONAGEM * personagem)
-{
-    set_personagem_identidade_id(personagem, count() + 1);
-
-    char nome[20];
-    printf("Nome: ");
-    scanf(" %[^\n]", nome);
-    set_personagem_identidade_nome(personagem, nome);
-
-    int raca;
-    printf("Raca:\n");
-    printf("[1] IA\t[2]HUMANO: ");
-    scanf(" %d", &raca);
-    set_personagem_identidade_raca(personagem, raca);
-
-    int profissao;
-    printf("Profissao:\n");
-    printf("[1] SOLDADO\t[2]CIENTISTA\t[3]OPERARIO\t[4]ATIRADOR: ");
-    scanf(" %d", &profissao);
-    set_personagem_identidade_profissao(personagem, profissao);
-}
-
-// SET PERSONAGEM INFLUENCIA
 
 void set_personagem_influencia(PERSONAGEM * personagem)
 {
@@ -304,40 +266,65 @@ void set_personagem_influencia(PERSONAGEM * personagem)
     }
 }
 
-// SET PERSONAGEM ATRIBUTOS
-
-void set_personagem_atributos(PERSONAGEM * personagem)
+void set_personagem_identidade_profissao_operario(PERSONAGEM * personagem)
 {
     srand(time(NULL));
     
+    personagem->atributo.inteligencia =      rand() % PTS_ATRIBUTO;
+    personagem->atributo.forca        = 10 + rand() % (PTS_ATRIBUTO - 10);
+    personagem->atributo.agilidade    = 10 + rand() % (PTS_ATRIBUTO - 10);
+}
+
+void set_personagem_identidade_profissao_atirador(PERSONAGEM * personagem)
+{
+    srand(time(NULL));
+
+    personagem->atributo.forca        =      rand() % PTS_ATRIBUTO;
+    personagem->atributo.inteligencia = 10 + rand() % (PTS_ATRIBUTO - 10);
+    personagem->atributo.agilidade    = 10 + rand() % (PTS_ATRIBUTO - 10);
+}
+
+void set_personagem_identidade_profissao_soldado(PERSONAGEM * personagem)
+{
+    srand(time(NULL));
+
+    personagem->atributo.inteligencia =      rand() % PTS_ATRIBUTO;
+    personagem->atributo.forca        = 10 + rand() % (PTS_ATRIBUTO - 10);
+    personagem->atributo.agilidade    = 10 + rand() % (PTS_ATRIBUTO - 10);
+}
+
+void set_personagem_identidade_profissao_cientista(PERSONAGEM * personagem)
+{
+    srand(time(NULL));
+
+    personagem->atributo.inteligencia =      rand() % PTS_ATRIBUTO;
+    personagem->atributo.agilidade    =      rand() % PTS_ATRIBUTO;
+    personagem->atributo.forca        = 15 + rand() % (PTS_ATRIBUTO - 15);
+}
+
+void set_personagem_atributo(PERSONAGEM * personagem)
+{
     switch (personagem->identidade.profissao)
     {
         case operario:
-            personagem->atributos.inteligencia =      rand()%20;
-            personagem->atributos.forca        = 10 + rand()%20;
-            personagem->atributos.agilidade    = 10 + rand()%20;
-        break;
+            set_personagem_identidade_profissao_operario(personagem);
+            break;
         
         case atirador:
-            personagem->atributos.forca        =      rand()%20;
-            personagem->atributos.inteligencia = 10 + rand()%20;
-            personagem->atributos.agilidade    = 10 + rand()%20;
+            set_personagem_identidade_profissao_operario(personagem);
             break;
     
         case soldado:
-            personagem->atributos.inteligencia =      rand()%20;
-            personagem->atributos.forca        = 10 + rand()%20;
-            personagem->atributos.agilidade    = 10 + rand()%20;
+            set_personagem_identidade_profissao_soldado(personagem);
             break;
     
         case cientista:
-            personagem->atributos.forca        =      rand()%20;
-            personagem->atributos.agilidade    =      rand()%20;
-            personagem->atributos.inteligencia = 15 + rand()%20;
+            set_personagem_identidade_profissao_cientista(personagem);
     }
-}
 
-// SET PERSONAGEM
+    personagem->atributo.hp = 50;
+    personagem->atributo.xp = 0;
+}
 
 void set_personagem()
 {
@@ -345,9 +332,9 @@ void set_personagem()
 
     PERSONAGEM * personagem = (PERSONAGEM *) malloc(sizeof(PERSONAGEM));
 
-    set_personagem_identidade(personagem);
-    set_personagem_influencia(personagem);
-    set_personagem_atributos(personagem);
+    //set_personagem_identidade(personagem);
+    //set_personagem_influencia(personagem);
+    //set_personagem_atributo(personagem);
 
     int qnt = count();
     
@@ -370,91 +357,71 @@ void set_personagem()
     upcount(qnt + 1);
 }
 
-void personagens()
+void set_state_personagens_keyboard_char(PERSONAGEM * personagem, EVENT ev)
 {
-    clrscr();
-
-    printf("\n\nPERSONAGENS:\n\n");
-
-    PERSONAGEM ** personagem = load_personagens();
-
-    int i, qnt = count();
-
-    if (!qnt)
-        printf("NAO HA PERSONAGENS CADASTRADOS");
-
-    else
-        for (i = 0; i < qnt; i++)
-            printf("[%d] %s\n\n", personagem[i]->identidade.id, personagem[i]->identidade.nome);
-
-    int id;
-    int opcao;
-
-    printf("\n\n[0] CRIAR NOVO PERSONAGEM");
-    printf("\n\nOPCAO: ");
-    scanf(" %d", &id);
-
-    switch(id)
+    if (ev.type == ALLEGRO_EVENT_KEY_CHAR)
     {
-        case 0:
-            set_personagem();
-            personagens();
-            break;
-
-        default:
-            if (id > qnt)
+        if (strlen(personagem->identidade.nome) <= 16)
+        {
+            char temp[] = {ev.keyboard.unichar, '\0'};
+            if (ev.keyboard.unichar == ' ')
             {
-                personagens();
+                strcat(personagem->identidade.nome, temp);
             }
-
-            print_personagem(personagem[id-1]);
-            printf("\n[1]EDITAR\t[2]APAGAR\t[3]VOLTAR\n");
-            printf("\nOpcao: ");
-            scanf("%d", &opcao);
-
-            switch(opcao)
+            else if (ev.keyboard.unichar >= '0' &&
+                     ev.keyboard.unichar <= '9')
             {
-                case 1:
-                    edit_personagem(personagem[id-1]);
-                    personagens();
-                    break;
-
-                case 2:
-                    delete_personagem(personagem, id);
-                    personagens();
-                    break;
-
-                default:
-                    personagens();
+                strcat(personagem->identidade.nome, temp);
+            }
+            else if (ev.keyboard.unichar >= 'A' &&
+                     ev.keyboard.unichar <= 'Z')
+            {
+                strcat(personagem->identidade.nome, temp);
+            }
+            else if (ev.keyboard.unichar >= 'a' &&
+                     ev.keyboard.unichar <= 'z')
+            {
+                strcat(personagem->identidade.nome, temp);
             }
         }
-
-    free(personagem);
-}
-
-void menu()
-{
-    int opcao;
-
-    printf("\n\nMENU\n\n1 - Personagens\n\nOpcao: ");
-    scanf("%d", &opcao);
-
-    switch (opcao)
-    {
-        case 1:
-            personagens();
-            break;
-        default:
-            menu();
+ 
+        if (ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && strlen(personagem->identidade.nome) != 0)
+        {
+            personagem->identidade.nome[strlen(personagem->identidade.nome) - 1] = '\0';
+        }
     }
 }
 
-int main()
-{   
-    setlocale(LC_ALL,"Portuguese");
+void get_state_personagens_keyboard_char(PERSONAGEM * personagem)
+{
+    while (!al_is_event_queue_empty(event_queue_personagens_keyboard_char))
+    {
+        EVENT ev;
 
-    menu();
-    
-    printf("\n\n");
-    return 1;
+        al_wait_for_event(event_queue_personagens_keyboard_char, &ev);
+
+        if (!get_keyboard_personagem_nome)
+        {
+            set_state_personagens_keyboard_char(personagem, ev);
+
+            if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_ENTER)
+            {
+                get_keyboard_personagem_nome = true;
+            }
+        }
+    }
+}
+
+void personagens_keyboard_char(PERSONAGEM * personagem)
+{
+    get_state_personagens_keyboard_char(personagem);
+
+    if (strlen(personagem->identidade.nome) > 0)
+        al_draw_text(paragraph, color, 160, 170, ALIGN_LEFT, personagem->identidade.nome);
+}
+
+void g_personagens()
+{
+    al_draw_text(h1, color, 100, 100, ALIGN_LEFT, "Cadastrar Personagem");
+    al_draw_text(paragraph, color, 100, 170, ALIGN_LEFT, "Nome: ");
 }

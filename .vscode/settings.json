@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.phtml": "php",
+        "create.h": "c",
+        "functions.h": "c",
+        "allegro_video.h": "c"
+    }
+}
