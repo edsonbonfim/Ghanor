@@ -1,21 +1,21 @@
-#include "game/variables.h"
-#include "game/personagens.h"
 #include "game/menu/menu.c"
-
-#include "game/enum.h"
-//#include "game/history.h"
-//#include "game/video.h"
+#include "game/new_game/new_game.c"
 
 void game_loop()
 {
-    const int FPS = 60;
-
-    bool exit_game = false;
-    bool show_menu = true;
-
-    while (!exit_game)
+    while (1)
     {
-        if (show_menu)
-            g_menu(FPS, show_menu, exit_game);
+        switch(menu())
+        {
+            case 0:
+                new_game();
+                break;
+
+            case -1:
+                goto done;
+        }
     }
+
+    done:
+    printf("\nDone!!\n\n");
 }

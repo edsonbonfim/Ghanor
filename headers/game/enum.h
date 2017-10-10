@@ -1,1 +1,0 @@
-enum MY_KEYS { KEY_UP, KEY_DOW, KEY_LEFT, KEY_RIGHT };

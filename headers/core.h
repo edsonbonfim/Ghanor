@@ -13,6 +13,13 @@
 #include "allegro5/create.h"
 #include "allegro5/set.h"
 
+DISPLAY * display;
+
+int DISPLAY_W;
+int DISPLAY_H;
+
+const int FPS = 60;
+
 void install_allegro_components()
 {
     install_mouse();
