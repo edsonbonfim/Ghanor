@@ -11,6 +11,10 @@ void game_loop()
                 new_game();
                 break;
 
+            case 2:
+                //creditos();
+                break;
+
             case -1:
                 goto done;
         }

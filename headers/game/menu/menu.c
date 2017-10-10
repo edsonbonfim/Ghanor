@@ -7,6 +7,10 @@ int menu()
     int   opt;
     int * opt_hover = (int *) malloc(sizeof(int));
     int * opt_click = (int *) malloc(sizeof(int));
+    int * count = (int *) malloc(sizeof(int));
+
+    *count = 0;
+    *opt_hover = 0;
    
     EVENT event_video;
 
@@ -24,9 +28,11 @@ int menu()
 
     QUEUE * queue_hover = create_event_queue();
     al_register_event_source(queue_hover, al_get_mouse_event_source());
-
+    al_register_event_source(queue_hover, al_get_keyboard_event_source());
+    
     QUEUE * queue_click = create_event_queue();
     al_register_event_source(queue_click, al_get_mouse_event_source());
+    al_register_event_source(queue_click, al_get_keyboard_event_source());
 
     al_start_video(video, al_get_default_mixer());
     al_start_timer(timer);
@@ -38,10 +44,10 @@ int menu()
             video_display(video);
     
             draw_menu(h1, font, color);
-            menu_mouse_hover(opt_hover, queue_hover, font, hover);
+            menu_mouse_hover(opt_hover, count, queue_hover, font, hover);
 
-            if ((opt = menu_mouse_click(opt_click, queue_click)) != -2) goto done;
-    
+            if ((opt = menu_mouse_click(opt_click, count, queue_click)) != -2) goto done;
+
             al_flip_display();
             al_clear_to_color(al_map_rgb(0, 0, 0));
             
@@ -58,6 +64,7 @@ int menu()
 
     set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
 
+    free(count);
     free(opt_hover);
     free(opt_click);
 

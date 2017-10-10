@@ -2,14 +2,14 @@ void draw_menu(FONT * h1, FONT * font, COLOR color)
 {
     al_draw_filled_rectangle(0, 0, DISPLAY_W, DISPLAY_H, al_map_rgba(0, 0, 0, 200));
     al_draw_filled_rectangle(DISPLAY_W / 4, DISPLAY_H / 4, DISPLAY_W - (DISPLAY_W / 4), DISPLAY_H - (DISPLAY_H / 4), al_map_rgba(0, 0, 0, 200));
-    al_draw_text(h1,   color, DISPLAY_W/2, (DISPLAY_H/2)-110, ALIGN_CENTER, "nome do rpg");
+    al_draw_text(h1,   color, DISPLAY_W/2, (DISPLAY_H/2)-110, ALIGN_CENTER, "rebelation");
     al_draw_text(font, color, DISPLAY_W/2, (DISPLAY_H/2)-30,  ALIGN_CENTER, "continuar");
     al_draw_text(font, color, DISPLAY_W/2, (DISPLAY_H/2)+20,  ALIGN_CENTER, "novo jogo");
     al_draw_text(font, color, DISPLAY_W/2, (DISPLAY_H/2)+70,  ALIGN_CENTER, "creditos");
     al_draw_text(font, color, DISPLAY_W/2, (DISPLAY_H/2)+120, ALIGN_CENTER, "sair");
 }
 
-int get_menu_opt(EVENT ev)
+int get_menu_mouse_opt(EVENT ev)
 {
     if ((ev.mouse.x > (DISPLAY_W/4)+270 && ev.mouse.x < (DISPLAY_W/4)+415)
     &&   ev.mouse.y > (DISPLAY_H/4)+160 && ev.mouse.y < (DISPLAY_H/4)+185)
@@ -34,8 +34,40 @@ int get_menu_opt(EVENT ev)
     return -1;
 }
 
-void menu_mouse_hover(int * opt, QUEUE * queue, FONT * font, COLOR color)
+int get_menu_keyboard_opt(EVENT ev, int * count)
 {
+    switch(ev.keyboard.keycode)
+    {
+        case ALLEGRO_KEY_DOWN:
+        case ALLEGRO_KEY_RIGHT:
+            *count = *count + 1;
+            return *count;
+            break;
+
+        case ALLEGRO_KEY_UP:
+        case ALLEGRO_KEY_LEFT:
+            *count = *count - 1;
+            return *count;
+            break;
+    }
+
+    return -1;
+}
+
+void menu_mouse_hover(int * opt, int * count, QUEUE * queue, FONT * font, COLOR color)
+{
+    if (*count > 3)
+    {
+        *opt = 0;
+        *count = 0;
+    }
+
+    if (*count < 0)
+    {
+        *opt = 3;
+        *count = 3;
+    }
+
     while (!al_is_event_queue_empty(queue))
     {
         EVENT ev;
@@ -43,7 +75,10 @@ void menu_mouse_hover(int * opt, QUEUE * queue, FONT * font, COLOR color)
         al_wait_for_event(queue, &ev);
         
         if (ev.type == EVENT_MOUSE_AXES)
-            *opt = get_menu_opt(ev);
+            *opt = get_menu_mouse_opt(ev);
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+            *opt = get_menu_keyboard_opt(ev, count);
     }
 
     switch(*opt)
@@ -73,7 +108,7 @@ void menu_mouse_hover(int * opt, QUEUE * queue, FONT * font, COLOR color)
     }
 }
 
-int menu_mouse_click(int * opt, QUEUE * queue)
+int menu_mouse_click(int * opt, int * count, QUEUE * queue)
 {
     while (!al_is_event_queue_empty(queue))
     {
@@ -82,13 +117,19 @@ int menu_mouse_click(int * opt, QUEUE * queue)
         al_wait_for_event(queue, &ev);
         
         if (ev.type == EVENT_MOUSE_BUTTON_UP)
-            *opt = get_menu_opt(ev);
+            *opt = get_menu_mouse_opt(ev);
+
+        else if (ev.keyboard.keycode == ALLEGRO_KEY_ENTER)
+            *opt = *count;
     }
 
     switch (*opt)
     {
         case 0:
             return 0;
+
+        case 2:
+            return 2;
 
         case 3:
             return -1;
