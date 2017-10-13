@@ -6,12 +6,12 @@
 #include "headers/core.h"
 #include "headers/game.h"
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
     init();
 
     // SET FULLSCREEN WINDOW
-    al_set_new_display_flags(FULLSCREEN_WINDOW);
+    al_set_new_display_flags(FULLSCREEN_WINDOW | ALLEGRO_PROGRAMMABLE_PIPELINE | ALLEGRO_OPENGL);
 
     // INSTALL ALLEGRO COMPONENTS
     install_allegro_components();
@@ -22,7 +22,7 @@ int main(int argc, char ** argv)
     al_reserve_samples(1);
 
     // CREATE DISPLAY
-    display = create_display(1, 1);
+    display = create_display(1080, 720);
 
     // DISPLAY DIMENTIONS
     DISPLAY_W = al_get_display_width(display);

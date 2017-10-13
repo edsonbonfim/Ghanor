@@ -1,5 +1,8 @@
+#include "utils.c"
 #include "game/menu/menu.c"
+#include "game/creditos/creditos.c"
 #include "game/new_game/new_game.c"
+#include "game/continuar/continuar.c"
 
 void game_loop()
 {
@@ -7,15 +10,19 @@ void game_loop()
     {
         switch(menu())
         {
-            case 0:
-                new_game();
+            case 1:
+                //continuar();
                 break;
 
             case 2:
-                //creditos();
+                //new_game();
                 break;
 
-            case -1:
+            case 3:
+                creditos();
+                break;
+
+            default:
                 goto done;
         }
     }
