@@ -69,7 +69,7 @@ int new_game()
             {
                 EVENT ev;
 
-                al_wait_for_event(queue_mouse);
+                al_wait_for_event(queue_mouse, &ev);
             }
 
             // UPDATE DISPLAY
