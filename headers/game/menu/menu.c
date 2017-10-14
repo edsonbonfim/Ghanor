@@ -3,18 +3,9 @@
 int menu()
 {
     int opt, qnt;
-    int redraw = 1;
-
-    EVENT event_video;
 
     FONT *h1 = load_ttf_font("fonts/gtek-technology.ttf", 30, 0);
     FONT *font = load_ttf_font("fonts/gtek-technology.ttf", 20, 0);
-    VIDEO *video = al_open_video("videos/video.ogv");
-    TIMER *timer = al_create_timer(1.0 / FPS);
-
-    QUEUE *queue_video = create_event_queue();
-    al_register_event_source(queue_video, al_get_video_event_source(video));
-    al_register_event_source(queue_video, al_get_timer_event_source(timer));
 
     QUEUE *queue_hover = create_event_queue();
     al_register_event_source(queue_hover, al_get_mouse_event_source());
@@ -24,8 +15,11 @@ int menu()
     al_register_event_source(queue_click, al_get_mouse_event_source());
     al_register_event_source(queue_click, al_get_keyboard_event_source());
 
-    al_start_video(video, al_get_default_mixer());
-    al_start_timer(timer);
+#if SHOW_VIDEO
+    load_video();
+#else
+    load_background();
+#endif
 
     if (!count())
         qnt = 2;
@@ -34,9 +28,13 @@ int menu()
 
     while (1)
     {
+#if SHOW_VIDEO
+
         if (redraw && al_event_queue_is_empty(queue_video))
         {
             video_display(video);
+
+            redraw = 0;
 
             draw_menu(h1, font);
 
@@ -47,14 +45,25 @@ int menu()
 
             al_flip_display();
             al_clear_to_color(al_map_rgb(0, 0, 0));
-
-            redraw = false;
         }
 
-        al_wait_for_event(queue_video, &event_video);
+        g_event_video();
 
-        if (event_video.type == ALLEGRO_EVENT_TIMER)
-            redraw = true;
+#else
+
+        al_draw_bitmap(bg, 0, 0, 0);
+
+        draw_menu(h1, font);
+
+        menu_mouse_hover(queue_hover, font, &qnt);
+
+        if ((opt = menu_mouse_click(queue_click, &qnt)))
+            goto done;
+
+        al_flip_display();
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+#endif
     }
 
 done:
@@ -63,11 +72,12 @@ done:
 
     al_destroy_font(h1);
     al_destroy_font(font);
-    al_close_video(video);
-    al_destroy_timer(timer);
     al_destroy_event_queue(queue_hover);
     al_destroy_event_queue(queue_click);
-    al_destroy_event_queue(queue_video);
+
+#if SHOW_VIDEO
+    close_video();
+#endif
 
     return opt;
 }
@@ -225,22 +235,4 @@ int menu_mouse_click(QUEUE *queue, int *qnt)
     }
 
     return 0;
-}
-
-static void video_display(ALLEGRO_VIDEO *video)
-{
-    int w, h, x, y;
-
-    ALLEGRO_BITMAP *frame = al_get_video_frame(video);
-
-    if (!frame)
-        return;
-
-    w = DISPLAY_W + 300;
-    h = DISPLAY_H + 300;
-
-    x = (DISPLAY_W - w) / 2;
-    y = (DISPLAY_H - h) / 2;
-
-    al_draw_scaled_bitmap(frame, 0, 0, al_get_bitmap_width(frame), al_get_bitmap_height(frame), x, y, w, h, 0);
 }

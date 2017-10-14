@@ -2,30 +2,23 @@
 
 int creditos()
 {
-    int redraw = 1;
-
-    EVENT event_video;
-
     COLOR color = al_map_rgb(153, 153, 153);
 
     FONT *h1 = load_ttf_font("fonts/gtek-technology.ttf", 30, 0);
     FONT *font = load_ttf_font("fonts/gtek-technology.ttf", 20, 0);
     FONT *roboto = load_ttf_font("fonts/Roboto-Regular.ttf", 12, 0);
-    VIDEO *video = al_open_video("videos/video.ogv");
-    TIMER *timer = al_create_timer(1.0 / FPS);
 
     QUEUE *queue_keyboard = create_event_queue();
     al_register_event_source(queue_keyboard, al_get_keyboard_event_source());
 
-    QUEUE *queue_video = create_event_queue();
-    al_register_event_source(queue_video, al_get_video_event_source(video));
-    al_register_event_source(queue_video, al_get_timer_event_source(timer));
-
-    al_start_video(video, al_get_default_mixer());
-    al_start_timer(timer);
+#if SHOW_VIDEO
+    load_video();
+#endif
 
     while (1)
     {
+#if SHOW_VIDEO
+
         if (redraw && al_event_queue_is_empty(queue_video))
         {
             video_display(video);
@@ -48,10 +41,28 @@ int creditos()
             redraw = false;
         }
 
-        al_wait_for_event(queue_video, &event_video);
+        g_event_video();
 
-        if (event_video.type == ALLEGRO_EVENT_TIMER)
-            redraw = true;
+#else
+
+        al_draw_bitmap(bg, 0, 0, 0);
+
+        draw_creditos(h1, font, roboto, color);
+
+        while (!al_event_queue_is_empty(queue_keyboard))
+        {
+            EVENT ev;
+
+            al_wait_for_event(queue_keyboard, &ev);
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE)
+                goto done;
+        }
+
+        al_flip_display();
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+#endif
     }
 
 done:
@@ -59,10 +70,11 @@ done:
     al_destroy_font(h1);
     al_destroy_font(font);
     al_destroy_font(roboto);
-    al_close_video(video);
-    al_destroy_timer(timer);
     al_destroy_event_queue(queue_keyboard);
-    al_destroy_event_queue(queue_video);
+
+#if SHOW_VIDEO
+    close_video();
+#endif
 
     return 0;
 }
