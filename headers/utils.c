@@ -27,6 +27,7 @@ int fadein(ALLEGRO_BITMAP *imagem, int time)
     return 1;
 }
 
+/**
 static void choose_shader_source(ALLEGRO_SHADER *shader, char const **vsource, char const **psource)
 {
       ALLEGRO_SHADER_PLATFORM platform = al_get_shader_platform(shader);
@@ -48,6 +49,39 @@ static void choose_shader_source(ALLEGRO_SHADER *shader, char const **vsource, c
             *vsource = NULL;
             *psource = NULL;
       }
+}
+*/
+
+int count()
+{
+    FILE * file = fopen("data/personagens/count.txt", "r");
+
+    if (file == NULL)
+    {
+        perror("Falha ao abrir o arquivo data/personagens/count.txt");
+        exit(0);
+    }
+
+    int qnt;
+
+    fscanf(file, "%d", &qnt);
+    fclose(file);
+
+    return qnt;
+}
+
+void upcount(int qnt)
+{
+    FILE * file = fopen("data/personagens/count.txt", "w");
+
+    if (file == NULL)
+    {
+        perror("Falha ao abrir o arquivo data/personagens/count.txt");
+        exit(0);
+    }
+
+    fprintf(file, "%d", qnt);
+    fclose(file);
 }
 
 ALLEGRO_BITMAP *load_bitmap_at_size(const char *filename, int w, int h)

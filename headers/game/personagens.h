@@ -45,38 +45,6 @@ void clrscr()
     system("@cls||clear");
 }
 
-int count()
-{
-    FILE * file = fopen("data/personagens/count.txt", "r");
-
-    if (file == NULL)
-    {
-        perror("Falha ao abrir o arquivo data/personagens/count.txt");
-        exit(0);
-    }
-
-    int qnt;
-
-    fscanf(file, "%d", &qnt);
-    fclose(file);
-
-    return qnt;
-}
-
-void upcount(int qnt)
-{
-    FILE * file = fopen("data/personagens/count.txt", "w");
-
-    if (file == NULL)
-    {
-        perror("Falha ao abrir o arquivo data/personagens/count.txt");
-        exit(0);
-    }
-
-    fprintf(file, "%d", qnt);
-    fclose(file);
-}
-
 void create_personagem(FILE * file, PERSONAGEM * personagem, int id)
 {
     fprintf(file, "Id: %d\n",        id);

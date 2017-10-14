@@ -15,7 +15,7 @@ void game_loop()
                 break;
 
             case 2:
-                //new_game();
+                new_game();
                 break;
 
             case 3:
@@ -27,6 +27,6 @@ void game_loop()
         }
     }
 
-    done:
+done:
     printf("\nDone!!\n\n");
 }

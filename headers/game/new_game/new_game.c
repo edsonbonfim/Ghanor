@@ -4,7 +4,8 @@ int new_game()
 
     EVENT event_video;
 
-    COLOR color = al_map_rgb(200, 200, 200);
+    COLOR color_humano = al_map_rgb(153, 153, 153);
+    COLOR color_sintozoide = al_map_rgb(153, 153, 153);
 
     FONT *h1 = load_ttf_font("fonts/gtek-technology.ttf", 30, 0);
     FONT *font = load_ttf_font("fonts/gtek-technology.ttf", 20, 0);
@@ -26,6 +27,9 @@ int new_game()
     al_start_video(video, al_get_default_mixer());
     al_start_timer(timer);
 
+    int hover_humano = 0;
+    int hover_sintozoide = 0;
+
     while (1)
     {
         if (redraw && al_event_queue_is_empty(queue_video))
@@ -36,22 +40,38 @@ int new_game()
 
             // HUMANOS
 
-            al_draw_filled_rectangle(DISPLAY_W / 6, DISPLAY_H / 6, DISPLAY_W / 2.1, DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(0, 0, 0, 200));
-            al_draw_filled_rectangle((DISPLAY_W / 6) - 5, (DISPLAY_H / 6) - 5, (DISPLAY_W / 2.1) + 5, (DISPLAY_H - (DISPLAY_H / 6)) + 5, al_map_rgba(0, 0, 0, 50));
-            al_draw_filled_rectangle((DISPLAY_W / 6) - 3, (DISPLAY_H / 6) - 3, (DISPLAY_W / 2.1) + 3, (DISPLAY_H - (DISPLAY_H / 6)) + 3, al_map_rgba(0, 0, 0, 100));
-            al_draw_filled_rectangle((DISPLAY_W / 6) - 1, (DISPLAY_H / 6) - 1, (DISPLAY_W / 2.1) + 1, (DISPLAY_H - (DISPLAY_H / 6)) + 1, al_map_rgba(50, 0, 0, 150));
-            
-            al_draw_text(font, color, DISPLAY_W / 3.1, (DISPLAY_H / 6) + 50, ALIGN_CENTER, "humanos");
-            al_draw_text(roboto, color, DISPLAY_W / 3.1, (DISPLAY_H / 6) + 100, ALIGN_CENTER, "JUNTE-SE AOS HUMANOS E IMPESSA O REINADO DOS SINTOZOIDES");
+            if (hover_humano)
+            {
+                al_draw_filled_rectangle(DISPLAY_W / 6, DISPLAY_H / 6, DISPLAY_W / 2.1, DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(50, 0, 0, 200));
+                al_draw_filled_rectangle((DISPLAY_W / 6) - 1, (DISPLAY_H / 6) - 1, (DISPLAY_W / 2.1) + 1, (DISPLAY_H - (DISPLAY_H / 6)) + 1, al_map_rgba(0, 0, 0, 50));
+                al_draw_filled_rectangle((DISPLAY_W / 6) - 2, (DISPLAY_H / 6) - 2, (DISPLAY_W / 2.1) + 2, (DISPLAY_H - (DISPLAY_H / 6)) + 2, al_map_rgba(0, 0, 0, 30));
+                al_draw_filled_rectangle((DISPLAY_W / 6) - 3, (DISPLAY_H / 6) - 3, (DISPLAY_W / 2.1) + 3, (DISPLAY_H - (DISPLAY_H / 6)) + 3, al_map_rgba(0, 0, 0, 10));
+            }
+
+            else
+            {
+                al_draw_filled_rectangle(DISPLAY_W / 6, DISPLAY_H / 6, DISPLAY_W / 2.1, DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(0, 0, 0, 200));
+            }
+
+            al_draw_text(font, color_humano, DISPLAY_W / 3.1, (DISPLAY_H / 6) + 50, ALIGN_CENTER, "humanos");
+            //al_draw_text(roboto, color_humano, DISPLAY_W / 3.1, (DISPLAY_H / 6) + 100, ALIGN_CENTER, "JUNTE-SE AOS HUMANOS E IMPESSA O REINADO DOS SINTOZOIDES");
 
             // SINTOZOIDES
 
-            al_draw_filled_rectangle(DISPLAY_W / 1.9, DISPLAY_H / 6, DISPLAY_W - (DISPLAY_W / 6), DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(0, 0, 0, 200));
-            al_draw_filled_rectangle((DISPLAY_W / 1.9) - 5, (DISPLAY_H / 6) - 5, (DISPLAY_W - (DISPLAY_W / 6)) + 5, (DISPLAY_H - (DISPLAY_H / 6)) + 5, al_map_rgba(0, 0, 0, 50));
-            al_draw_filled_rectangle((DISPLAY_W / 1.9) - 3, (DISPLAY_H / 6) - 3, (DISPLAY_W - (DISPLAY_W / 6)) + 3, (DISPLAY_H - (DISPLAY_H / 6)) + 3, al_map_rgba(0, 0, 0, 100));
-            al_draw_filled_rectangle((DISPLAY_W / 1.9) - 1, (DISPLAY_H / 6) - 1, (DISPLAY_W - (DISPLAY_W / 6)) + 1, (DISPLAY_H - (DISPLAY_H / 6)) + 1, al_map_rgba(0, 0, 50, 150));
+            if (hover_sintozoide)
+            {
+                al_draw_filled_rectangle(DISPLAY_W / 1.9, DISPLAY_H / 6, DISPLAY_W - (DISPLAY_W / 6), DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(0, 0, 50, 200));
+                al_draw_filled_rectangle((DISPLAY_W / 1.9) - 1, (DISPLAY_H / 6) - 1, (DISPLAY_W - (DISPLAY_W / 6)) + 1, (DISPLAY_H - (DISPLAY_H / 6)) + 1, al_map_rgba(0, 0, 0, 50));
+                al_draw_filled_rectangle((DISPLAY_W / 1.9) - 3, (DISPLAY_H / 6) - 2, (DISPLAY_W - (DISPLAY_W / 6)) + 2, (DISPLAY_H - (DISPLAY_H / 6)) + 2, al_map_rgba(0, 0, 0, 30));
+                al_draw_filled_rectangle((DISPLAY_W / 1.9) - 5, (DISPLAY_H / 6) - 3, (DISPLAY_W - (DISPLAY_W / 6)) + 3, (DISPLAY_H - (DISPLAY_H / 6)) + 3, al_map_rgba(0, 0, 0, 10));
+            }
 
-            al_draw_text(font, color, DISPLAY_W - (DISPLAY_W / 3.1), (DISPLAY_H / 6) + 50, ALIGN_CENTER, "sintozoides");
+            else
+            {
+                al_draw_filled_rectangle(DISPLAY_W / 1.9, DISPLAY_H / 6, DISPLAY_W - (DISPLAY_W / 6), DISPLAY_H - (DISPLAY_H / 6), al_map_rgba(0, 0, 0, 200));
+            }
+
+            al_draw_text(font, color_sintozoide, DISPLAY_W - (DISPLAY_W / 3.1), (DISPLAY_H / 6) + 50, ALIGN_CENTER, "sintozoides");
 
             // EVENTS
 
@@ -70,9 +90,33 @@ int new_game()
                 EVENT ev;
 
                 al_wait_for_event(queue_mouse, &ev);
-            }
 
-            // UPDATE DISPLAY
+                if (ev.type == ALLEGRO_EVENT_MOUSE_AXES)
+                {
+                    if (ev.mouse.x > DISPLAY_W / 6 && ev.mouse.x < DISPLAY_W / 2.1 && ev.mouse.y > DISPLAY_H / 6 && ev.mouse.y < DISPLAY_H - (DISPLAY_H / 6))
+                    {
+                        hover_humano = 1;
+                        color_humano = al_map_rgb(255, 255, 255);
+                        set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
+                    }
+
+                    else if (ev.mouse.x > DISPLAY_W / 1.9 && ev.mouse.x < DISPLAY_W - (DISPLAY_W / 6) && ev.mouse.y > DISPLAY_H / 6 && DISPLAY_H - (DISPLAY_H / 6))
+                    {
+                        hover_sintozoide = 1;
+                        color_sintozoide = al_map_rgb(255, 255, 255);
+                        set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
+                    }
+
+                    else
+                    {
+                        hover_humano = 0;
+                        hover_sintozoide = 0;
+                        color_humano = al_map_rgb(200, 200, 200);
+                        color_sintozoide = al_map_rgb(200, 200, 200);
+                        set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
+                    }
+                }
+            }
 
             al_flip_display();
             al_clear_to_color(al_map_rgb(0, 0, 0));
