@@ -2,6 +2,7 @@
 #include "game/menu/menu.c"
 #include "game/creditos/creditos.c"
 #include "game/new_game/new_game.c"
+#include "game/new_game/personagem.c"
 #include "game/continuar/continuar.c"
 
 void game_loop()

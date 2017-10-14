@@ -15,7 +15,7 @@
 #include "allegro5/create.h"
 #include "allegro5/set.h"
 
-#include "../algif5/algif.h"
+//#include "../algif5/algif.h"
 
 DISPLAY * display;
 
