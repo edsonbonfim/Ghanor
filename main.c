@@ -1,45 +1,101 @@
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
-#include "headers/core.h"
-#include "headers/game.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+
+int FPS = 60;
+int DISPLAY_W;
+int DISPLAY_H;
+
+ALLEGRO_DISPLAY *display;
+
+#define SHOW_VIDEO 0
+
+#if SHOW_VIDEO
+    #include "game/video.c"
+#endif
+
+#include "game/game.c"
 
 int main(int argc, char **argv)
 {
-    init();
+    if (!al_init())
+    {
+        fprintf(stderr, "Falha ao inicializar o allegro.\n");
+        return -1;
+    }
 
-    // SET FULLSCREEN WINDOW
-    al_set_new_display_flags(FULLSCREEN_WINDOW | ALLEGRO_PROGRAMMABLE_PIPELINE | ALLEGRO_OPENGL);
+    if (!al_install_mouse())
+    {
+        fprintf(stderr, "Falha ao inicializar o mouse.\n");
+        return -1;
+    }
 
-    // INSTALL ALLEGRO COMPONENTS
-    install_allegro_components();
+    if (!al_install_keyboard())
+    {
+        fprintf(stderr, "Falha ao inicializar o teclado.\n");
+        return -1;
+    }
 
-    // INSTALL ALLEGRO ADDONS
-    init_allegro_addons();
+    if (!al_install_audio())
+    {
+        fprintf(stderr, "Falha ao inicializar o audio.\n");
+        return -1;
+    }
+
+    al_init_font_addon();
+
+    if (!al_init_ttf_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar o add-on allegro_ttf.\n");
+        return -1;
+    }
+    
+    if (!al_init_image_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar o add-on allegro_image.\n");
+        return -1;
+    }
+
+    #if SHOW_VIDEO
+        if (!al_init_video_addon())
+        {
+            fprintf(stderr, "Falha ao inicializar o add-on allegro_video.\n");
+            return -1;
+        }
+    #endif
 
     al_reserve_samples(1);
 
-    // CREATE DISPLAY
-    display = create_display(1080, 720);
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);    
 
-    // DISPLAY DIMENTIONS
+    if (!(display = al_create_display(1080, 720)))
+    {
+        fprintf(stderr, "Falha ao criar display.\n");
+        return -1;
+    }
+
+    al_set_window_title(display, "RPG SEM NOME!!!");
+
     DISPLAY_W = al_get_display_width(display);
     DISPLAY_H = al_get_display_height(display);
 
-    // WINDOW TITLE
-    al_set_window_title(display, "RPG SEM NOME!!!");
-
-    // RUN GAME
     game_loop();
 
-    // UNINSTALL KEYBOARD
+    al_uninstall_audio();
+    al_uninstall_mouse();
     al_uninstall_keyboard();
 
-    // DESTROY DISPLAY
     al_destroy_display(display);
 
-    // EXIT SUCCESS
-    return EXIT_SUCCESS;
-} //END_OF_MAIN();
+    return 0;
+}
+END_OF_MAIN();
