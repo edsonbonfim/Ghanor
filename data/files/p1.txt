@@ -1,0 +1,11 @@
+Id: 1
+Nome: EdsonOnildo
+Raca: 2
+Profissao: 4
+Influencia IA: 42
+Influencia Humano: 0
+HP: 50
+XP: 0
+Forca: 22
+Agilidade: 22
+Inteligencia: 10

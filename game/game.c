@@ -1,7 +1,7 @@
-#include "utils.c"
 #include "menu.c"
 #include "creditos.c"
-#include "new_game.c"
+#include "new_game/new_game.c"
+#include "fases/fase.c"
 
 void game_loop()
 {
@@ -14,8 +14,10 @@ void game_loop()
                 break;
 
             case 2:
-                new_game();
-                break;
+                if (!new_game())
+                    goto done;
+
+                fase();
 
             case 3:
                 creditos();
@@ -26,6 +28,7 @@ void game_loop()
         }
     }
 
-done:
+    done:
+
     printf("\nDone!!\n\n");
 }

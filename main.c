@@ -17,7 +17,9 @@ int DISPLAY_H;
 
 ALLEGRO_DISPLAY *display;
 
-#define SHOW_VIDEO 0
+#define SHOW_VIDEO 1
+
+#include "game/utils.c"
 
 #if SHOW_VIDEO
     #include "game/video.c"
@@ -65,6 +67,12 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    if (!al_init_primitives_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar o add-on allegro_primitives.\n");
+        return -1;
+    }
+
     #if SHOW_VIDEO
         if (!al_init_video_addon())
         {
@@ -98,4 +106,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
-END_OF_MAIN();
+//END_OF_MAIN();
