@@ -1,34 +1,41 @@
-#include "menu.c"
-#include "creditos.c"
-#include "new_game/new_game.c"
-#include "fases/fase.c"
+#include "tools/tools.c"
 
-void game_loop()
+#include "personagem/layout.c"
+#include "personagem/personagem.c"
+#include "personagem/raca/raca.c"
+#include "personagem/create/create.c"
+#include "personagem/classe/humano/humano.c"
+#include "personagem/classe/sintozoide/sintozoide.c"
+
+#include "menu/menu.c"
+#include "creditos/creditos.c"
+#include "novo_jogo/novo_jogo.c"
+
+int game()
 {
+    /** Menu **/
     while (1)
     {
         switch(menu())
         {
             case 1:
-                //continuar();
+    
                 break;
-
+                
             case 2:
-                if (!new_game())
-                    goto done;
-
-                fase();
-
+                novo_jogo();
+                break;
+    
             case 3:
                 creditos();
                 break;
-
-            default:
+    
+            case 4:
                 goto done;
         }
     }
 
     done:
 
-    printf("\nDone!!\n\n");
+    printf("\n\nDone.\n\n");
 }
