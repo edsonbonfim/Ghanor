@@ -1,7 +1,5 @@
 .vscode
 RPG
 Makefile
-./bin/Debug/*
-./obj/Debug/*
 *.depend
 *.layout
