@@ -3,7 +3,7 @@
 int menu()
 {
     /** ----- Fontes ----- **/
-    
+
     ALLEGRO_FONT *font[]
     =
     {
@@ -12,7 +12,7 @@ int menu()
     };
 
     /** ----- Bitmaps ----- **/
-    
+
     ALLEGRO_BITMAP *bitmap[]
     =
     {
@@ -20,7 +20,7 @@ int menu()
     };
 
     /** ----- Fila de Eventos ----- **/
-    
+
     ALLEGRO_EVENT_QUEUE *queue[]
     =
     {
@@ -45,14 +45,14 @@ int menu()
     while(1)
     {
         /** ----- Desenhos ----- **/
-        
+
         menu_draw_background(bitmap);
         menu_draw_text(font, &option);
-        
+
         al_flip_display();
 
         /** ----- Eventos ----- ***/
-        
+
         menu_event_mouse_hover(queue, &option);
         menu_event_keyboard_keydown(queue, &option);
 
@@ -85,7 +85,7 @@ void menu_draw_text(ALLEGRO_FONT **font, int *option)
     ALLEGRO_FONT *options = font[FONT_GTEK];
 
     al_draw_text(title, COLOR_GRAY, x, y - 110, ALLEGRO_ALIGN_CENTER, "without name");
-    
+
     if (1)
         al_draw_text(options, al_map_rgb(50, 50, 50), x, y - 30, ALLEGRO_ALIGN_CENTER, "continuar");
     else
@@ -125,8 +125,8 @@ void menu_draw_background(ALLEGRO_BITMAP **bitmap)
     int y2 = DISPLAY_H - y1;
 
     al_draw_bitmap(bitmap[BITMAP_BACKGROUND], 0, 0, 0);
-    
-    al_draw_filled_rectangle(0, 0, x1 * 4, y1 * 4, al_map_rgba(0, 0, 0, 100));    
+
+    al_draw_filled_rectangle(0, 0, x1 * 4, y1 * 4, al_map_rgba(0, 0, 0, 100));
     al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgba(0, 0, 0, 200));
     al_draw_filled_rectangle(x1 - 1, y1 - 1, x2 + 1, y2 + 1, al_map_rgba(0, 0, 0, 50));
     al_draw_filled_rectangle(x1 - 2, y1 - 2, x2 + 2, y2 + 2, al_map_rgba(0, 0, 0, 30));

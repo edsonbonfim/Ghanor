@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> // toupper
+#include <ctype.h>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -64,14 +64,16 @@ int main (int argv, char **argc)
         return -1;
     }
 
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+
     ALLEGRO_DISPLAY *display = al_create_display(1080, 720);
-    
+
     if (!display)
     {
         fprintf(stderr, "Falha ao criar display.\n");
         return -1;
     }
-    
+
     DISPLAY_W = al_get_display_width(display);
     DISPLAY_H = al_get_display_height(display);
 
