@@ -19,6 +19,9 @@ enum FONT { FONT_GTEK, FONT_GTEK_TITLE, FONT_ROBOTO };
 enum BITMAP { BITMAP_BACKGROUND };
 enum EVENT { EVENT_MOUSE, EVENT_MOUSE_HOVER, EVENT_MOUSE_CLICK, EVENT_KEYBOARD_KEYDOWN, EVENT_KEYBOARD_KEYENTER };
 
+ALLEGRO_EVENT_QUEUE *event_queue_display_close  = NULL;
+ALLEGRO_EVENT_QUEUE *event_queue_display_resize = NULL;
+
 int DISPLAY_W;
 int DISPLAY_H;
 
@@ -64,15 +67,17 @@ int main (int argv, char **argc)
         return -1;
     }
 
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+    al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE | ALLEGRO_GENERATE_EXPOSE_EVENTS | ALLEGRO_FULLSCREEN_WINDOW);
 
-    ALLEGRO_DISPLAY *display = al_create_display(1080, 720);
+    ALLEGRO_DISPLAY *display = al_create_display(1024, 768);
 
     if (!display)
     {
         fprintf(stderr, "Falha ao criar display.\n");
         return -1;
     }
+
+    al_set_window_title(display, "WITHOUT NAME");
 
     DISPLAY_W = al_get_display_width(display);
     DISPLAY_H = al_get_display_height(display);
@@ -81,7 +86,13 @@ int main (int argv, char **argc)
     COLOR_WHITE = al_map_rgb(255, 255, 255);
     COLOR_BLACK = al_map_rgb(0, 0, 0);
 
-    game();
+    event_queue_display_close = create_event_queue();
+    al_register_event_source(event_queue_display_close, al_get_display_event_source(display));
+
+    event_queue_display_resize = create_event_queue();
+    al_register_event_source(event_queue_display_resize, al_get_display_event_source(display));
+
+    game(display);
 
     return 0;
 }

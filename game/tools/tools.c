@@ -63,6 +63,38 @@ ALLEGRO_BITMAP *load_bitmap_at_size(char *filename, int w, int h)
     return resized_bmp;
 }
 
+bool event_display_close(int *option)
+{
+    while(!al_is_event_queue_empty(event_queue_display_close))
+    {
+        ALLEGRO_EVENT event;
+
+        al_wait_for_event(event_queue_display_close, &event);
+
+        if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+        {
+            *option = -1;
+            return true;
+        }
+
+        return false;
+    }
+}
+
+void event_display_resize()
+{
+    while(!al_is_event_queue_empty(event_queue_display_resize))
+    {
+        ALLEGRO_EVENT event;
+
+        al_wait_for_event(event_queue_display_resize, &event);
+
+        if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            al_acknowledge_resize(event.display.source);
+    }
+}
+
+
 int get_mouse_position(ALLEGRO_EVENT event, int x1, int y1, int x2, int y2)
 {
     if (event.mouse.x > x1 && event.mouse.x < x2 

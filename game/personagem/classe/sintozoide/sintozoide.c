@@ -16,9 +16,9 @@ int personagem_classe_sintozoide()
     ALLEGRO_BITMAP *bitmap[]
     =
     {
-        [BITMAP_ATIRADOR]    load_bitmap("data/images/humano.png"),
-        [BITMAP_OPERARIO]   load_bitmap("data/images/sintozoide.png"),
-        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.png", DISPLAY_W, DISPLAY_H)
+        [BITMAP_ATIRADOR]    load_bitmap("data/images/atirador.png"),
+        [BITMAP_OPERARIO]   load_bitmap("data/images/operario.png"),
+        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.jpeg", DISPLAY_W, DISPLAY_H)
     };
 
     /** ----- Fila de Eventos ----- **/
@@ -93,7 +93,7 @@ void personagem_classe_sintozoide_atirador_draw_background(ALLEGRO_BITMAP **bitm
     else
     {
         color_bg     = al_map_rgba(0, 0, 0, 200);
-        color_bitmap = al_map_rgb(100, 100, 100);
+        color_bitmap = al_map_rgb(150, 150, 150);
     }
 
     int x1 = DISPLAY_W / 6;
@@ -120,13 +120,17 @@ void personagem_classe_sintozoide_atirador_draw_text(ALLEGRO_FONT **font, int op
     int y1 = DISPLAY_H / 5;
     int y2 = DISPLAY_H - y1;
 
+    /**
+     * Criados como os militares perfeitos com o intuito de proteger a raça humana. Mas, após a ascensão das IA's, passaram a proteger o interesse de seus semelhantes.
+     */
+
     char *text[]
     =
     {
         "atirador",
-        "DESCRICAO ATIRADOR LINHA 1",
-        "DESCRICAO ATIRADOR LINHA 2",
-        "DESCRICAO ATIRADOR LINHA 3"
+        "CRIADOS COMO OS MILITARES PARA PROTEGER",
+        "A RACA HUMANA, MAS APOS A ASCENCAO DAS",
+        "IA'S, PASSARAM A PROTEGER SEUS SEMELHANTES"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);
@@ -147,7 +151,7 @@ void personagem_classe_sintozoide_operario_draw_background(ALLEGRO_BITMAP **bitm
     else
     {
         color_bg     = al_map_rgba(0, 0, 0, 200);
-        color_bitmap = al_map_rgb(100, 100, 100);
+        color_bitmap = al_map_rgb(150, 150, 150);
     }
 
     int x1 = DISPLAY_W / 1.9;
@@ -178,9 +182,9 @@ void personagem_classe_sintozoide_operario_draw_text(ALLEGRO_FONT **font, int op
     =
     {
         "operario",
-        "DESCRICAO OPERARIO LINHA 1",
-        "DESCRICAO OPERARIO LINHA 2",
-        "DESCRICAO OPERARIO LINHA 3"
+        "ESPECIALISTAS EM MECANICA, SAO OS",
+        "UNICOS A CONHECER OS SEGREDOS",
+        "DAS TECNOLOGIAS DE GHANOR"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);

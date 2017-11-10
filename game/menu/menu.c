@@ -1,7 +1,12 @@
 #include "menu.h"
 
-int menu()
+int menu(ALLEGRO_DISPLAY *display, int *option)
 {
+    if (*option == MENU_SAIR)
+        return *option;
+
+    *option = (contar_numero_de_personagens()) ? MENU_CONTINUAR : MENU_NOVO_JOGO;
+
     /** ----- Fontes ----- **/
 
     ALLEGRO_FONT *font[]
@@ -16,7 +21,7 @@ int menu()
     ALLEGRO_BITMAP *bitmap[]
     =
     {
-        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.png", DISPLAY_W, DISPLAY_H)
+        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.jpeg", DISPLAY_W, DISPLAY_H)
     };
 
     /** ----- Fila de Eventos ----- **/
@@ -36,28 +41,27 @@ int menu()
     al_register_event_source(queue[EVENT_KEYBOARD_KEYDOWN], al_get_keyboard_event_source());
     al_register_event_source(queue[EVENT_KEYBOARD_KEYENTER], al_get_keyboard_event_source());
 
-    /** ----- Variaveis Auxiliares ----- **/
-
-    int option = (contar_numero_de_personagens()) ? 1 : 2;
-
     /** ----- Loop ----- **/
 
     while(1)
     {
         /** ----- Desenhos ----- **/
 
-        menu_draw_background(bitmap);
-        menu_draw_text(font, &option);
+        menu_draw_background(display, bitmap);
+        menu_draw_text(display, font, option);
 
         al_flip_display();
 
         /** ----- Eventos ----- ***/
 
-        menu_event_mouse_hover(queue, &option);
-        menu_event_keyboard_keydown(queue, &option);
+        event_display_resize();        
+        
+        menu_event_mouse_hover(display, queue, option);
+        menu_event_keyboard_keydown(queue, option);
 
-        if (menu_event_mouse_click(queue, &option)
-        ||  menu_event_keyboard_keyenter(queue, &option))
+        if (menu_event_mouse_click(display, queue, option)
+        ||  menu_event_keyboard_keyenter(queue, option)
+        ||  event_display_close(option))
             break;
     }
 
@@ -71,91 +75,88 @@ int menu()
     al_destroy_event_queue(queue[EVENT_KEYBOARD_KEYDOWN]);
     al_destroy_event_queue(queue[EVENT_KEYBOARD_KEYENTER]);
 
-    return option;
+    return *option;
 }
 
 /** ----- Desenhos ----- **/
 
-void menu_draw_text(ALLEGRO_FONT **font, int *option)
+void menu_draw_background(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP **bitmap)
 {
-    int x = DISPLAY_W / 2;
-    int y = DISPLAY_H / 2;
+    int display_width  = al_get_display_width(display);
+    int display_height = al_get_display_height(display);
 
+    int x1 = display_width  / 4;
+    int y1 = display_height / 4;
+    int x2 = display_width  - x1;
+    int y2 = display_height - y1;
+
+    al_draw_tinted_bitmap(bitmap[BITMAP_BACKGROUND], al_map_rgb(127.5, 127.5, 127.5), 0, 0, 0);
+    al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgba(0, 0, 0, 170));
+}
+
+void menu_draw_text(ALLEGRO_DISPLAY *display, ALLEGRO_FONT **font, int *option)
+{
+    int x = al_get_display_width(display)  / 2;
+    int y = al_get_display_height(display) / 2;
+    
     ALLEGRO_FONT *title   = font[FONT_GTEK_TITLE];
     ALLEGRO_FONT *options = font[FONT_GTEK];
+    
+    int numero_de_personagens = contar_numero_de_personagens();
 
-    al_draw_text(title, COLOR_GRAY, x, y - 110, ALLEGRO_ALIGN_CENTER, "without name");
-
-    if (1)
-        al_draw_text(options, al_map_rgb(50, 50, 50), x, y - 30, ALLEGRO_ALIGN_CENTER, "continuar");
-    else
-        al_draw_text(options, COLOR_GRAY, x, y - 30, ALLEGRO_ALIGN_CENTER, "continuar");
-
-    al_draw_text(options, COLOR_GRAY, x, y + 20, ALLEGRO_ALIGN_CENTER, "novo jogo");
-    al_draw_text(options, COLOR_GRAY, x, y + 70, ALLEGRO_ALIGN_CENTER, "creditos");
-    al_draw_text(options, COLOR_GRAY, x, y + 120, ALLEGRO_ALIGN_CENTER, "sair");
+    ALLEGRO_COLOR continuar = (!numero_de_personagens) ? al_map_rgb(50, 50, 50) : COLOR_GRAY;
+    
+    al_draw_text(title,   COLOR_GRAY, x, y - 120, ALLEGRO_ALIGN_CENTER, "without name");
+    al_draw_text(options, continuar,  x, y - 40,  ALLEGRO_ALIGN_CENTER, "continuar");
+    al_draw_text(options, COLOR_GRAY, x, y + 10,  ALLEGRO_ALIGN_CENTER, "novo jogo");
+    al_draw_text(options, COLOR_GRAY, x, y + 60,  ALLEGRO_ALIGN_CENTER, "creditos");
+    al_draw_text(options, COLOR_GRAY, x, y + 110, ALLEGRO_ALIGN_CENTER, "sair");
 
     switch (*option)
     {
-        case 1:
-            if (!contar_numero_de_personagens())
+        case MENU_CONTINUAR:
+            if (!numero_de_personagens)
                 break;
 
-            al_draw_text(options, COLOR_WHITE, x + 1, y - 29, ALLEGRO_ALIGN_CENTER, "continuar");
+            al_draw_text(options, COLOR_WHITE, x + 1, y - 39, ALLEGRO_ALIGN_CENTER, "continuar");
             break;
 
-        case 2:
-            al_draw_text(options, COLOR_WHITE, x + 1, y + 21, ALLEGRO_ALIGN_CENTER, "novo jogo");
+        case MENU_NOVO_JOGO:
+            al_draw_text(options, COLOR_WHITE, x + 1, y + 11, ALLEGRO_ALIGN_CENTER, "novo jogo");
             break;
 
-        case 3:
-            al_draw_text(options, COLOR_WHITE, x + 1, y + 71, ALLEGRO_ALIGN_CENTER, "creditos");
+        case MENU_CREDITOS:
+            al_draw_text(options, COLOR_WHITE, x + 1, y + 61, ALLEGRO_ALIGN_CENTER, "creditos");
             break;
 
-        case 4:
-            al_draw_text(options, COLOR_WHITE, x + 1, y + 121, ALLEGRO_ALIGN_CENTER, "sair");
+        case MENU_SAIR:
+            al_draw_text(options, COLOR_WHITE, x + 1, y + 111, ALLEGRO_ALIGN_CENTER, "sair");
     }
-}
-
-void menu_draw_background(ALLEGRO_BITMAP **bitmap)
-{
-    int x1 = DISPLAY_W / 4;
-    int y1 = DISPLAY_H / 4;
-    int x2 = DISPLAY_W - x1;
-    int y2 = DISPLAY_H - y1;
-
-    al_draw_bitmap(bitmap[BITMAP_BACKGROUND], 0, 0, 0);
-
-    al_draw_filled_rectangle(0, 0, x1 * 4, y1 * 4, al_map_rgba(0, 0, 0, 100));
-    al_draw_filled_rectangle(x1, y1, x2, y2, al_map_rgba(0, 0, 0, 200));
-    al_draw_filled_rectangle(x1 - 1, y1 - 1, x2 + 1, y2 + 1, al_map_rgba(0, 0, 0, 50));
-    al_draw_filled_rectangle(x1 - 2, y1 - 2, x2 + 2, y2 + 2, al_map_rgba(0, 0, 0, 30));
-    al_draw_filled_rectangle(x1 - 3, y1 - 3, x2 + 3, y2 + 3, al_map_rgba(0, 0, 0, 10));
 }
 
 /** ----- Eventos ----- **/
 
-int menu_event_mouse_hover_get_opt(ALLEGRO_EVENT event)
+int menu_event_mouse_hover_get_opt(ALLEGRO_DISPLAY *display, ALLEGRO_EVENT event)
 {
-    int x = DISPLAY_W / 2;
-    int y = DISPLAY_H / 2;
+    int x = al_get_display_width(display)  / 2;
+    int y = al_get_display_height(display) / 2;
 
-    if (get_mouse_position(event, x - 70, y - 30, x + 70, y - 10))
-        return 1;
+    if (get_mouse_position(event, x - 70, y - 40, x + 70, y - 20))
+        return MENU_CONTINUAR;
 
-    if (get_mouse_position(event, x - 75, y + 20, x + 75, y + 40))
-        return 2;
+    if (get_mouse_position(event, x - 75, y + 10, x + 75, y + 30))
+        return MENU_NOVO_JOGO;
 
-    if (get_mouse_position(event, x - 65, y + 70, x + 65, y + 90))
-        return 3;
+    if (get_mouse_position(event, x - 65, y + 60, x + 65, y + 80))
+        return MENU_CREDITOS;
 
-    if (get_mouse_position(event, x - 30, y + 120, x + 30, y + 140))
-        return 4;
+    if (get_mouse_position(event, x - 30, y + 110, x + 30, y + 130))
+        return MENU_SAIR;
 
     return 0;
 }
 
-int menu_event_mouse_hover(ALLEGRO_EVENT_QUEUE **queue, int *option)
+int menu_event_mouse_hover(ALLEGRO_DISPLAY *display, ALLEGRO_EVENT_QUEUE **queue, int *option)
 {
     while (!al_is_event_queue_empty(queue[EVENT_MOUSE_HOVER]))
     {
@@ -164,11 +165,11 @@ int menu_event_mouse_hover(ALLEGRO_EVENT_QUEUE **queue, int *option)
         al_wait_for_event(queue[EVENT_MOUSE_HOVER], &event);
 
         if (event.type == ALLEGRO_EVENT_MOUSE_AXES)
-            *option = menu_event_mouse_hover_get_opt(event);
+            *option = menu_event_mouse_hover_get_opt(display, event);
     }
 }
 
-int menu_event_mouse_click(ALLEGRO_EVENT_QUEUE **queue, int *option)
+int menu_event_mouse_click(ALLEGRO_DISPLAY *display, ALLEGRO_EVENT_QUEUE **queue, int *option)
 {
     while (!al_is_event_queue_empty(queue[EVENT_MOUSE_CLICK]))
     {
@@ -178,7 +179,7 @@ int menu_event_mouse_click(ALLEGRO_EVENT_QUEUE **queue, int *option)
 
         if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
         {
-            *option = menu_event_mouse_hover_get_opt(event);
+            *option = menu_event_mouse_hover_get_opt(display, event);
             return *option;
         }
     }
@@ -196,16 +197,17 @@ int menu_event_keyboard_keydown(ALLEGRO_EVENT_QUEUE **queue, int *option)
             menu_event_keyboard_keydown_get_opt(event, option);
     }
 
-    return 1;
+    return MENU_CONTINUAR;
 }
 
 void menu_event_keyboard_keydown_get_opt(ALLEGRO_EVENT event, int *option)
 {
-    if (*option == 5)
-        *option = (contar_numero_de_personagens()) ? 1 : 2;
+    if (*option == MENU_SAIR + 1)
+        *option = (contar_numero_de_personagens()) ? MENU_CONTINUAR : MENU_NOVO_JOGO;
 
-    else if (*option == 0 || (*option == 1 && !contar_numero_de_personagens()))
-        *option = 4;
+    else if (*option == MENU_CONTINUAR - 1
+         || (*option == MENU_CONTINUAR && !contar_numero_de_personagens()))
+        *option = MENU_SAIR;
 
     else if (event.keyboard.keycode == ALLEGRO_KEY_DOWN)
         (*option)++;

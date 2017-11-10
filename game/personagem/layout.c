@@ -4,10 +4,9 @@
 
 void personagem_layout_draw_background(int x1, int y1, int x2, int y2, ALLEGRO_COLOR bgcolor)
 {
-    al_draw_filled_rectangle(x1,     y1,     x2,     y2,     bgcolor);
-    al_draw_filled_rectangle(x1 - 1, y1 - 1, x2 + 1, y2 + 1, al_map_rgba(0, 0, 0, 50));
-    al_draw_filled_rectangle(x1 - 2, y1 - 2, x2 + 2, y2 + 2, al_map_rgba(0, 0, 0, 30));
-    al_draw_filled_rectangle(x1 - 3, y1 - 3, x2 + 3, y2 + 3, al_map_rgba(0, 0, 0, 10));
+    x1 = x1 - 20;
+    x2 = x2 + 20;
+    al_draw_filled_rectangle(x1, y1, x2, y2, bgcolor);
 }
 
 void personagem_layout_draw_text(int x, int y1, int y2, ALLEGRO_FONT **font, ALLEGRO_COLOR color, char **text)

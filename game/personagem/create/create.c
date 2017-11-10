@@ -16,7 +16,7 @@ void personagem_create(Personagem *personagem)
     ALLEGRO_BITMAP *bitmap[]
     =
     {
-        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.png", DISPLAY_W, DISPLAY_H)
+        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.jpeg", DISPLAY_W, DISPLAY_H)
     };
 
     /** ----- Fila de Eventos ----- **/

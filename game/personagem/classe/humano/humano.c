@@ -16,9 +16,9 @@ int personagem_classe_humano()
     ALLEGRO_BITMAP *bitmap[]
     =
     {
-        [BITMAP_SOLDADO]   load_bitmap("data/images/humano.png"),
-        [BITMAP_CIENTISTA]   load_bitmap("data/images/sintozoide.png"),
-        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.png", DISPLAY_W, DISPLAY_H)
+        [BITMAP_SOLDADO]    load_bitmap("data/images/soldado.png"),
+        [BITMAP_CIENTISTA]  load_bitmap("data/images/cientista.png"),
+        [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.jpeg", DISPLAY_W, DISPLAY_H)
     };
 
     /** ----- Fila de Eventos ----- **/
@@ -93,7 +93,7 @@ void personagem_classe_humano_soldado_draw_background(ALLEGRO_BITMAP **bitmap, i
     else
     {
         color_bg     = al_map_rgba(0, 0, 0, 200);
-        color_bitmap = al_map_rgb(100, 100, 100);
+        color_bitmap = al_map_rgb(150, 150, 150);
     }
 
     int x1 = DISPLAY_W / 6;
@@ -120,13 +120,15 @@ void personagem_classe_humano_soldado_draw_text(ALLEGRO_FONT **font, int option)
     int y1 = DISPLAY_H / 5;
     int y2 = DISPLAY_H - y1;
 
+
+
     char *text[]
     =
     {
         "soldado",
-        "DESCRICAO SOLDADO LINHA 1",
-        "DESCRICAO SOLDADO LINHA 2",
-        "DESCRICAO SOLDADO LINHA 3"
+        "SUBSTITUIDOS PELOS ATIRADORES, QUANDO AS IA's",
+        "ASSUMIRAM O PODER, FORAM TOMADOS COMO HEROIS.",
+        "SE MOSTRARAM ESSENCIAIS PARA A LIBERTACAO HUMANA"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);
@@ -147,7 +149,7 @@ void personagem_classe_humano_cientista_draw_background(ALLEGRO_BITMAP **bitmap,
     else
     {
         color_bg     = al_map_rgba(0, 0, 0, 200);
-        color_bitmap = al_map_rgb(100, 100, 100);
+        color_bitmap = al_map_rgb(150, 150, 150);
     }
 
     int x1 = DISPLAY_W / 1.9;
@@ -178,9 +180,9 @@ void personagem_classe_humano_cientista_draw_text(ALLEGRO_FONT **font, int optio
     =
     {
         "cientista",
-        "DESCRICAO CIENTISTA LINHA 1",
-        "DESCRICAO CIENTISTA LINHA 2",
-        "DESCRICAO CIENTISTA LINHA 3"
+        "APOS A ELEICAO, SUBSTITUIRAM A ACADEMIA",
+        "PELO CENTRO DE APRIMORAMENTO PARA QUE",
+        "NAO DESCOBRISSEM AS FORMAS DE DESTRUIR AS IA's"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);

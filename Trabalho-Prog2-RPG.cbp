@@ -40,7 +40,7 @@
 		<Unit filename="data/fonts/roboto-regular.ttf">
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="data/images/bg.png">
+		<Unit filename="data/images/bg.jpeg">
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="data/images/delete_black.png">
