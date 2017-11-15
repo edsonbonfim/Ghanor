@@ -86,7 +86,7 @@ void menu_draw_background(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP **bitmap)
     int display_height = al_get_display_height(display);
 
     int x1 = display_width  / 4;
-    int y1 = display_height / 4;
+    int y1 = display_height / 4 - 20;
     int x2 = display_width  - x1;
     int y2 = display_height - y1;
 
@@ -106,7 +106,8 @@ void menu_draw_text(ALLEGRO_DISPLAY *display, ALLEGRO_FONT **font, int *option)
 
     ALLEGRO_COLOR continuar = (!numero_de_personagens) ? al_map_rgb(50, 50, 50) : COLOR_GRAY;
     
-    al_draw_text(title,   COLOR_GRAY, x, y - 120, ALLEGRO_ALIGN_CENTER, "without name");
+    al_draw_text(title,   COLOR_GRAY, x, y - 140, ALLEGRO_ALIGN_CENTER, "ghanor");
+    al_draw_text(title,   COLOR_GRAY, x, y - 110, ALLEGRO_ALIGN_CENTER, "the revolution");
     al_draw_text(options, continuar,  x, y - 40,  ALLEGRO_ALIGN_CENTER, "continuar");
     al_draw_text(options, COLOR_GRAY, x, y + 10,  ALLEGRO_ALIGN_CENTER, "novo jogo");
     al_draw_text(options, COLOR_GRAY, x, y + 60,  ALLEGRO_ALIGN_CENTER, "creditos");

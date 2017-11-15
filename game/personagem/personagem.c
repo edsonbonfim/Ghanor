@@ -1,7 +1,7 @@
 int const PTS_ATRIBUTO = 30;
 
 enum { RACA_HUMANO = 1, RACA_SINTOZOIDE };
-enum { CLASSE_SOLDADO = 1, CLASSE_CIENTISTA, CLASSE_ATIRADOR, CLASSE_OPERARIO };
+enum { CLASSE_SOLDADO = 1, CLASSE_ATIRADOR };
 
 typedef struct identidade
 {
@@ -218,10 +218,6 @@ void set_personagem_atributo(Personagem *personagem)
 {
     switch (personagem->identidade.classe)
     {
-    case CLASSE_OPERARIO:
-        set_personagem_identidade_profissao_operario(personagem);
-        break;
-
     case CLASSE_ATIRADOR:
         set_personagem_identidade_profissao_operario(personagem);
         break;
@@ -229,9 +225,6 @@ void set_personagem_atributo(Personagem *personagem)
     case CLASSE_SOLDADO:
         set_personagem_identidade_profissao_soldado(personagem);
         break;
-
-    case CLASSE_CIENTISTA:
-        set_personagem_identidade_profissao_cientista(personagem);
     }
 
     personagem->atributo.hp = 50;

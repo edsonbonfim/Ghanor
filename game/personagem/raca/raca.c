@@ -16,8 +16,8 @@ int personagem_raca(ALLEGRO_DISPLAY *display, int *option)
     ALLEGRO_BITMAP *bitmap[]
     =
     {
-        [BITMAP_HUMANO]     load_bitmap("data/images/humano.png"),
-        [BITMAP_SINTOZOIDE] load_bitmap("data/images/sintozoide.png"),
+        [BITMAP_HUMANO]     load_bitmap("data/images/atirador.png"),
+        [BITMAP_SINTOZOIDE] load_bitmap("data/images/operario.png"),
         [BITMAP_BACKGROUND] load_bitmap_at_size("data/images/bg.jpeg", DISPLAY_W, DISPLAY_H)
     };
 
@@ -124,9 +124,9 @@ void personagem_raca_humano_draw_text(ALLEGRO_FONT **font, int *option)
     =
     {
         "humano",
-        "DESCRICAO HUMANO LINHA 1",
-        "DESCRICAO HUMANO LINHA 2",
-        "DESCRICAO HUMANO LINHA 3"
+        "SOLDADOS SUBSTITUIDOS PELOS ATIRADORES. QUANDO AS",
+        "IA's ASSUMIRAM O PODER, FORAM TOMADOS COMO HEROIS.",
+        "SE MOSTRARAM ESSENCIAIS PARA A LIBERTACAO HUMANA"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);
@@ -177,10 +177,10 @@ void personagem_raca_sintozoide_draw_text(ALLEGRO_FONT **font, int *option)
     char *text[]
     =
     {
-        "sintozoide",
-        "DESCRICAO SINTOZOIDE LINHA 1",
-        "DESCRICAO SINTOZOIDE LINHA 2",
-        "DESCRICAO SINTOZOIDE LINHA 3"
+        "sintozoides",
+        "OPERARIOS ESPECIALISTAS EM MECANICA, SAO",
+        "OS UNICOS A CONHECER OS SEGREDOS",
+        "DAS TECNOLOGIAS DE GHANOR"
     };
 
     personagem_layout_draw_text(x, y1, y2, font, color, text);
