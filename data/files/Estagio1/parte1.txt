@@ -1,8 +1,8 @@
 os dias de trabalho dentro do nucleo central
 se resumem a reparar pequenos defeitos, na maior parte das vezes,
- de hardware. cada pequeno erro poderia significar danos permanentes 
- as inteligencias artificiais ligadas ao lugar afetado e,
-  consequentemente, mais erros apareceriam em um efeito bola de neve. 
-  por isso, a maior concentracao de operarios fica estabelecida 
-  no nucleo central. e, enquanto essas ficassem longe dos 
-  ouvidos humanos, a supremacia das ia’s continuaria sem ameacas.
+de hardware. cada pequeno erro poderia significar danos permanentes
+as inteligencias artificiais ligadas ao lugar afetado e,
+consequentemente, mais erros apareceriam em um efeito bola de neve.
+por isso, a maior concentracao de operarios fica estabelecida
+no nucleo central. e, enquanto essas ficassem longe dos
+ouvidos humanos, a supremacia das ia’s continuaria sem ameacas.

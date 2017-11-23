@@ -9,6 +9,8 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "algif5/algif.h"
+
 ALLEGRO_DISPLAY *display;
 
 ALLEGRO_COLOR COLOR_GRAY;

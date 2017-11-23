@@ -71,6 +71,10 @@
 		<Unit filename="game/creditos/creditos.h">
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="game/estagios/estagio1.c">
+			<Option compilerVar="CC" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="game/game.c">
 			<Option compilerVar="CC" />
 			<Option target="Release" />
