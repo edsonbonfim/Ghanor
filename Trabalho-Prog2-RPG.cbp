@@ -75,6 +75,10 @@
 			<Option compilerVar="CC" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="game/estagios/estagio2.c">
+			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="game/game.c">
 			<Option compilerVar="CC" />
 			<Option target="Release" />

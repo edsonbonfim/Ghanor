@@ -35,6 +35,7 @@ void estagio1_draw_background(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP **bitmap)
 
 void casoNao(ALLEGRO_DISPLAY *display, int *option);
 void casoFale(ALLEGRO_DISPLAY *display, int *option);
+void casoSiga(ALLEGRO_DISPLAY *display, int *option);
 
 void estagio1(ALLEGRO_DISPLAY *display, int *option)
 {
@@ -173,11 +174,10 @@ void casoNao(ALLEGRO_DISPLAY *display, int *option)
 
         int i, count = contar_linhas(parte1);
 
-
         while(1)
         {
             estagio1_draw_background(display, bitmap);
-                al_draw_text(font[FONT_GTEK_TITLE], al_map_rgb(255, 255, 255), DISPLAY_W / 2, DISPLAY_H / 2 - 200, ALLEGRO_ALIGN_CENTER, "VC DECIDIU NAO FALAR");
+                al_draw_text(font[FONT_GTEK_TITLE], al_map_rgb(255, 255, 255), DISPLAY_W / 2, DISPLAY_H / 2 - 200, ALLEGRO_ALIGN_CENTER, "VOCE DECIDIU NAO FALAR OU NAO SEGUIR");
 
             rewind(parte1);
 
@@ -293,6 +293,93 @@ void casoFale(ALLEGRO_DISPLAY *display, int *option)
                             casoNao(display, option);
 
                         /** Sim **/
+                        if (event.mouse.x > DISPLAY_W / 2)
+                            casoSiga(display, option);
+                    }
+
+                    else
+                        goto done;
+                }
+            }
+        }
+
+        done:
+
+        continue;
+    }
+}
+
+void casoSiga(ALLEGRO_DISPLAY *display, int *option){
+
+    ALLEGRO_FONT *font[]
+    =
+    {
+        [FONT_GTEK] load_font("data/fonts/Righteous-Regular.ttf", 14, 0),
+        [FONT_GTEK_TITLE] load_font("data/fonts/Righteous-Regular.ttf", 20, 0)
+    };
+
+    ALLEGRO_EVENT_QUEUE *queue[]
+    =
+    {
+        [EVENT_MOUSE_CLICK] create_event_queue()
+    };
+
+    al_register_event_source(queue[EVENT_MOUSE_CLICK], al_get_mouse_event_source());
+
+    int k;
+
+    char nome_do_arquivo[50];
+
+    ALLEGRO_BITMAP *bitmap[1];
+
+    int j = 2;
+
+    for (k = 1; k <= j; k++)
+    {
+        bitmap[BITMAP_BACKGROUND] = load_bitmap_at_size("data/images/Estagio1/casoFale1.jpg", DISPLAY_W, DISPLAY_H);
+
+        /** Carrega o arquivo **/
+        sprintf(nome_do_arquivo, "data/files/Estagio1/casoSiga%d.txt", k);
+        FILE *parte1 = fopen(nome_do_arquivo, "r");
+
+         char Lixo;
+        char c;
+        char l[1000];
+
+        int i, count = contar_linhas(parte1);
+
+
+        while(1)
+        {
+            estagio1_draw_background(display, bitmap);
+                al_draw_text(font[FONT_GTEK_TITLE], al_map_rgb(255, 255, 255), DISPLAY_W / 2, DISPLAY_H / 2 - 200, ALLEGRO_ALIGN_CENTER, "VOCE DECIDIU SEGUIR");
+
+            rewind(parte1);
+
+            for (i = 0; i < count; i++)
+            {
+                fscanf(parte1, "%[^\n]", l);
+                fscanf(parte1, "%c", &Lixo);
+                al_draw_text(font[FONT_GTEK], al_map_rgb(255, 255, 255), DISPLAY_W / 2, DISPLAY_H / 2 - 100 + (25 * i), ALLEGRO_ALIGN_CENTER, l);
+            }
+
+            al_flip_display();
+
+            while (!al_is_event_queue_empty(queue[EVENT_MOUSE_CLICK]))
+            {
+                ALLEGRO_EVENT event;
+
+                al_wait_for_event(queue[EVENT_MOUSE_CLICK], &event);
+
+                if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                {
+                    if (k == j)
+                    {
+                        /** Estagio2 **/
+                        //if (event.mouse.x < DISPLAY_W / 2)
+                          //  estagio2(display, option);
+
+                        /** Sim **/
                         //if (event.mouse.x > DISPLAY_W / 2)
                             //casoFale(dis);
                     }
@@ -307,4 +394,5 @@ void casoFale(ALLEGRO_DISPLAY *display, int *option)
 
         continue;
     }
+
 }
