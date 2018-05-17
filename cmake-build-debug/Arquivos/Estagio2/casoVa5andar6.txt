@@ -1,0 +1,1 @@
+O computador central, que você deveria usar, exibia uma tela preta com as letras: GSTIYYM dispostas. Era uma cifra de César seguindo o alfabeto romano com rotação de quatro para a direita, tudo que precisa fazer é digitar a palavra decodificada.

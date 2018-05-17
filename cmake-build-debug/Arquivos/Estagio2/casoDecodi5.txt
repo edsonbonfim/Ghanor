@@ -1,0 +1,1 @@
+Uma partição nova havia sido criada com arquivos que não deveriam estar ali de acordo com a sua memória. Ao abri-lo, alguns dados começaram a ser mostrados em loop tanto sobre localizações quanto sobre os humanos que pareciam ser os envolvidos em tudo aquilo.

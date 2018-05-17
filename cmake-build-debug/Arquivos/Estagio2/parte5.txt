@@ -1,0 +1,1 @@
+Os servidores que continham os dados solicitados também poderiam ser acessados a partir do primeiro andar. Porém, apesar do caminho estar claro e sem qualquer tipo de ameaça, o processo para a obtenção dos dados seria bem mais lenta.

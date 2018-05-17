@@ -1,0 +1,1 @@
+Só precisou garantir que o processo não fosse interrompido, já que a tecnologia ali faria as informações ficarem com espaços brancos caso isso acontecesse.

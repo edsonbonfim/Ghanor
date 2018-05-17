@@ -1,0 +1,1 @@
+As funções de seu sistema voltavam aos poucos, podia captar as mensagens de voz, mas não conseguia processar as imagens ainda.
